@@ -1240,7 +1240,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       <div class="header-inner">
         <a class="brand" href="#about" aria-label="Back to introduction">Xiongfeng Shan</a>
         <nav class="anchor-nav" aria-label="Page sections">
-          <a href="#about" aria-current="page">About</a><a href="mailto:xiongfeng.shan@hotmail.com">Contact</a>
+          <a href="#about" data-section-link="about" aria-current="page">About</a>
+          <a href="#publications" data-section-link="publications">Publications</a>
+          <a href="mailto:xiongfeng.shan@hotmail.com">Contact</a>
         </nav>
         <button class="theme-toggle" type="button" aria-label="Switch to dark theme"><span aria-hidden="true">◐</span></button>
       </div>
@@ -1268,6 +1270,26 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             </p>
           </div>
         </section>
+        <section id="publications" class="content-section section-anchor" aria-labelledby="publications-heading">
+          <div class="section-heading">
+            <p class="section-index">01</p>
+            <h2 id="publications-heading">Publications</h2>
+          </div>
+          <ol class="publication-list">
+            <li class="publication">
+              <article class="publication-copy">
+                <div class="publication-kicker"><span>01</span><span>2026</span></div>
+                <h3>When Memory Takes Gradients: Collaborative Vector Memory for Agentic Recommender Systems</h3>
+                <p class="authors">Hanchong Chen, Xing Tang, Lingjie Li, <strong>Xiongfeng Shan</strong>, Xiuqiang He</p>
+                <p class="venue">arXiv preprint · arXiv:2608.26895 · 2026</p>
+                <div class="publication-links">
+                  <a href="https://arxiv.org/abs/2608.26895" target="_blank" rel="noopener noreferrer">arXiv</a>
+                  <a href="https://arxiv.org/pdf/2608.26895" target="_blank" rel="noopener noreferrer">PDF</a>
+                </div>
+              </article>
+            </li>
+          </ol>
+        </section>
       </div>
     </main>
     <footer class="site-footer">
@@ -1282,6 +1304,21 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       const syncLabel = () =>
         button.setAttribute("aria-label", document.documentElement.dataset.theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
       syncLabel();
+      const sectionLinks = [...document.querySelectorAll("[data-section-link]")];
+      const markSection = (id) =>
+        sectionLinks.forEach((link) => {
+          if (link.dataset.sectionLink === id) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+      sectionLinks.forEach((link) => link.addEventListener("click", () => markSection(link.dataset.sectionLink)));
+      const sectionObserver = new IntersectionObserver(
+        (entries) => {
+          const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (visible) markSection(visible.target.id);
+        },
+        { rootMargin: "-10% 0px -10%", threshold: [0, 0.2, 0.6] }
+      );
+      sectionLinks.forEach((link) => sectionObserver.observe(document.getElementById(link.dataset.sectionLink)));
       button.addEventListener("click", () => {
         const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
         document.documentElement.dataset.theme = next;
