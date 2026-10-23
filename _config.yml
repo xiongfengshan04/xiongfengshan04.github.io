@@ -233,6 +233,7 @@ exclude:
   - _pages/teaching.md
   - _pages/plugins.md
   - _pages/news.md
+  - _pages/about.md
   - _pages/cv.md
   - _pages/projects.md
   - _pages/publications.md
